@@ -1,60 +1,41 @@
 var state; // 0, 1, or 2
 var instruments; // s0
 var sounds; // s0
+var remixSounds;
 var pictures;
-
-//images
-var fluteImg;
-var birdWhistleImg;
-var ocarinaImg;
-var hamastsaImg;
-var shellTrumpetImg;
-var panpipeImg;
-var oysterCatcherRattleImg;
-var peyoteRattleImg;
-
-//sounds
-var fluteSound;
-var birdWhistleSound;
-var ocarinaSound;
-var shellTrumpetSound;
-var panpipeSound;
-var peyoteRattleSound;
 
 function preload() {
 	sounds = [];
-	sounds.push(loadSound('sounds/edited/flute.mp3')); // 1
-	sounds.push(loadSound('sounds/edited/birdWhistle.mp3')); // 2
-	sounds.push(loadSound('sounds/edited/ocarina.mp3')); // 3
+	sounds.push(loadSound('sounds/edited/instruments/flute.mp3')); // 1
+	sounds.push(loadSound('sounds/edited/instruments/birdWhistle.mp3')); // 2
+	sounds.push(loadSound('sounds/edited/instruments/ocarina.mp3')); // 3
 	sounds.push(''); // 4 - not there
-	sounds.push(loadSound('sounds/edited/shellTrumpet.mp3')); // 5
-	sounds.push(loadSound('sounds/edited/panpipe.mp3')); // 6
+	sounds.push(loadSound('sounds/edited/instruments/shellTrumpet.mp3')); // 5
+	sounds.push(loadSound('sounds/edited/instruments/panpipe.mp3')); // 6
 	sounds.push(''); // 7 - not there
-	sounds.push(loadSound('sounds/edited/peyoteRattle.mp3')); // 8
+	sounds.push(loadSound('sounds/edited/instruments/peyoteRattle.mp3')); // 8
 	soundFormats('ogg','mp3');
+
+	remixSounds = [];
+	remixSounds.push(loadSound('sounds/edited/remixSounds/70BPM_SimpleStraightBeat.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/bellRing.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/birdChirping.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/bossaNova_DrumGroove.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/caxixiShakerSolo.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/dubstepBeat.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/flowingStream.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/guiro_Cha.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/hipHop.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/ocean.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/soulRnB.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/tboxDrum.mp3'));
 
 	pictures = [];
 	for (var i = 0; i < 8; i++) {
-		pictures.push(loadImage('pictures/' + String(i+1) + '.png'));
+		pictures.push(loadImage('images/' + String(i+1) + '.png'));
 	}
-
-	//images
-	fluteImg = loadImage("images/1_flute.png");
-	birdWhistleImg = loadImage("images/2_birdWhistle.png");
-	ocarinaImg = loadImage("images/3_ocarina.png");
-	hamastsaImg = loadImage("images/4_hamastsa.png");
-	shellTrumpetImg = loadImage("images/5_incisedShellTrumpet.png");
-	panpipeImg = loadImage("images/6_panpipe.png");
-	oysterCatcherRattleImg = loadImage("images/7_oysterCatcherRattle.png");
-	peyoteRattleImg = loadImage("images/8_peyoteRattle.png");
-
-	//sounds
-	fluteSound = loadSound("sounds/edited/flute.mp3");
-	birdWhistleSound = loadSound("sounds/edited/birdWhistle.mp3");
-	ocarinaSound = loadSound("sounds/edited/ocarina.mp3");
-	shellTrumpetSound = loadSound("sounds/edited/shellTrumpet.mp3");
-	panpipeSound = loadSound("sounds/edited/panpipe.mp3");
-	peyoteRattleSound = loadSound("sounds/edited/peyoteRattle.mp3");
+	pictures.push(loadImage('images/drumIcon.png'));
+	pictures.push(loadImage('images/treeIcon.png'));
 }
 
 function setup() {
@@ -77,7 +58,6 @@ function setup() {
 			x += 120;
 		}
 	}
-	text('press 1 for state 1, 2 for state 2, or 3 for state 3', 0, 0);
 }
 
 function draw() {
