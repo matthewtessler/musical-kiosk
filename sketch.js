@@ -30,18 +30,19 @@ function preload() {
 	peyoteRattleImg = loadImage("images/8_peyoteRattle.png");
 
 	//sounds
-	fluteSound = loadSound("sounds/flute.mp3");
-	birdWhistleSound = loadSound("sounds/birdWhistle.mp3");
-	ocarinaSound = loadSound("sounds/ocarina.mp3");
-	shellTrumpetSound = loadSound("sounds/shellTrumpet.mp3");
-	panpipeSound = loadSound("sounds/panpipe.mp3");
-	peyoteRattleSound = loadSound("sounds/peyoteRattle.mp3");
+	fluteSound = loadSound("sounds/edited/flute.mp3");
+	birdWhistleSound = loadSound("sounds/edited/birdWhistle.mp3");
+	ocarinaSound = loadSound("sounds/edited/ocarina.mp3");
+	shellTrumpetSound = loadSound("sounds/edited/shellTrumpet.mp3");
+	panpipeSound = loadSound("sounds/edited/panpipe.mp3");
+	peyoteRattleSound = loadSound("sounds/edited/peyoteRattle.mp3");
 }
 
 function setup() {
-	createCanvas(500,500);
+	createCanvas(800,600);
 	background(255,0,0);
 	state = 0;
+	text('press 1 for state 1, 2 for state 2, or 3 for state 3', 0, 0);
 }
 
 function draw() {
