@@ -4,6 +4,8 @@ var sounds; // s0
 var remixSounds;
 var pictures;
 
+var stateTwo;
+
 function preload() {
 	sounds = [];
 	sounds.push(loadSound('sounds/edited/instruments/flute.mp3')); // 1
@@ -17,18 +19,20 @@ function preload() {
 	soundFormats('ogg','mp3');
 
 	remixSounds = [];
+	//beats
 	remixSounds.push(loadSound('sounds/edited/remixSounds/70BPM_SimpleStraightBeat.mp3'));
-	remixSounds.push(loadSound('sounds/edited/remixSounds/bellRing.mp3'));
-	remixSounds.push(loadSound('sounds/edited/remixSounds/birdChirping.mp3'));
 	remixSounds.push(loadSound('sounds/edited/remixSounds/bossaNova_DrumGroove.mp3'));
 	remixSounds.push(loadSound('sounds/edited/remixSounds/caxixiShakerSolo.mp3'));
 	remixSounds.push(loadSound('sounds/edited/remixSounds/dubstepBeat.mp3'));
-	remixSounds.push(loadSound('sounds/edited/remixSounds/flowingStream.mp3'));
 	remixSounds.push(loadSound('sounds/edited/remixSounds/guiro_Cha.mp3'));
 	remixSounds.push(loadSound('sounds/edited/remixSounds/hipHop.mp3'));
-	remixSounds.push(loadSound('sounds/edited/remixSounds/ocean.mp3'));
 	remixSounds.push(loadSound('sounds/edited/remixSounds/soulRnB.mp3'));
 	remixSounds.push(loadSound('sounds/edited/remixSounds/tboxDrum.mp3'));
+	//soundscapes
+	remixSounds.push(loadSound('sounds/edited/remixSounds/bellRing.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/birdChirping.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/ocean.mp3'));
+	remixSounds.push(loadSound('sounds/edited/remixSounds/flowingStream.mp3'));
 
 	pictures = [];
 	for (var i = 0; i < 8; i++) {
@@ -39,7 +43,7 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(800,600);
+	createCanvas(500,600);
 	background(255,0,0);
 	imageMode(CENTER);
 	state = 0;
@@ -58,6 +62,8 @@ function setup() {
 			x += 120;
 		}
 	}
+
+	stateTwo = new StateTwo(instruments, remixSounds);
 }
 
 function draw() {
@@ -74,6 +80,7 @@ function draw() {
 	}
 	else if (state == 2) {
 		background(0,0,255);
+		stateTwo.display();
 	}
 }
 
@@ -133,5 +140,70 @@ class Instrument { // maybe i could have play/pause right on the ellipse? like t
 			}
 		}
 	}
+}
 
+class StateTwo {
+	constructor(instruments) {
+		this.instruments = instruments;
+		this.remixButtonDiameter = 40;
+		this.remixButtonRadius = this.remixButtonDiameter/2;
+	}
+
+	display() {
+		text("Remix", 25,25);
+		for (var i = 0; i < 8; i++) {
+			instruments[i].display();
+		}
+		/***************remix buttons************/
+		var column = 1;
+		var row = 1;
+		for (var i=0; i<12; i++) {
+			if (row <= 2) {
+				var temp = new RemixButton(70*column, 70*row + 400, i)
+				temp.display();
+				temp.clicked();
+				column++;
+				if (column === 7) {
+					row++;
+					column = 1;
+				}
+			}
+		}
+		/***********end remix buttons************/
+	}
+}
+
+class RemixButton {
+	constructor(x, y, soundIndex) {
+		this.xPos = x;
+		this.yPos = y;
+		this.diameter = 40;
+		this.radius = this.diameter/2;
+		this.soundIndex = soundIndex;
+		if (this.soundIndex <=7) {
+			this.isBeat = true;
+			this.isSoundscape = false;
+		}
+		else if (this.soundIndex >= 8) {
+			this.isBeat = false;
+			this.isSoundscape = true;
+		}
+	}
+
+	display() {
+		ellipse(this.xPos, this.yPos, this.diameter, this.diameter);
+		imageMode(CENTER);
+		if (this.isBeat) {
+			image(pictures[8], this.xPos, this.yPos, this.radius, this.radius);
+		}
+		else if (this.isSoundscape) {
+			image(pictures[9], this.xPos, this.yPos, this.radius, this.radius);
+		}
+	}
+
+	clicked() {
+		if (dist(mouseX, mouseY, this.xPos, this.yPos) < this.radius && mouseIsPressed) {
+			remixSounds[this.soundIndex].play();
+		}
+	}
 }
