@@ -1,9 +1,17 @@
 var state; // 0, 1, or 2
 var instruments; // s0
 var sounds; // s0
-var remixSounds;
 var pictures;
 
+//STATE 1: matching
+var speaker;
+var soundActivator;
+var clickChecker = false
+var winChecker, matchCheck,soundMatch, imgMatch, soundMatchX, soundMatchY, imgMatchX, imgMatchY, newY,newX;
+//END STATE 1 SPECIFIC
+
+//STATE 2
+var remixSounds;
 var stateTwo;
 
 function preload() {
@@ -40,6 +48,8 @@ function preload() {
 	}
 	pictures.push(loadImage('images/drumIcon.png'));
 	pictures.push(loadImage('images/treeIcon.png'));
+	
+	speaker = loadImage("images/speaker.png");
 }
 
 function setup() {
@@ -62,6 +72,25 @@ function setup() {
 			x += 120;
 		}
 	}
+	
+	//STATE 1
+	fluteSound = new SoundS2(425,75,0);
+	birdSound = new SoundS2(425,125,1);
+	ocarinaSound = new SoundS2(425,175,2);
+	hamastsaSound = new SoundS2(425,225,3);
+	shellSound = new SoundS2(425,275,4);
+	panpipeSound = new SoundS2(425,325,5);
+	oysterSound = new SoundS2(425,375,6);
+	peyoteSound = new SoundS2(425,425,7);
+	fluteImg = new ImgS2(75,75,0);
+	birdImg = new ImgS2(75,125,1);
+	ocarinaImg = new ImgS2(75,175,2);
+	hamastsaImg = new ImgS2(75,225,3);
+	shellImg = new ImgS2(75,275,4);
+	panpipeImg = new ImgS2(75,325,5);
+	oysterImg = new ImgS2(75,375,6);
+	peyoteImg = new ImgS2(75,425,7);
+	//END STATE 1
 
 	stateTwo = new StateTwo(instruments, remixSounds);
 }
@@ -76,7 +105,8 @@ function draw() {
 		}
 	}
 	else if (state == 1) {
-		background(0,255,0);
+		background(0,220,0);
+		matchGame();
 	}
 	else if (state == 2) {
 		background(0,0,255);
@@ -141,6 +171,220 @@ class Instrument { // maybe i could have play/pause right on the ellipse? like t
 		}
 	}
 }
+
+//STATE 1: matching
+function matchGame() {
+	fluteSound.display();
+	birdSound.display();
+	ocarinaSound.display();
+	hamastsaSound.display();
+	shellSound.display();
+	panpipeSound.display();
+	oysterSound.display();
+	peyoteSound.display();
+	fluteImg.display();
+	birdImg.display();
+	ocarinaImg.display();
+	hamastsaImg.display();
+	shellImg.display();
+	panpipeImg.display();
+	oysterImg.display();
+	peyoteImg.display();
+	fluteImg.move();
+	birdImg.move();
+	ocarinaImg.move();
+	hamastsaImg.move();
+	shellImg.move();
+	panpipeImg.move();
+	oysterImg.move();
+	peyoteImg.move();
+	if (winChecker == true && imgMatch == 0) {
+		fluteImg = new ImgS2(425,75,0);
+		winChecker = false;
+	}
+	if (winChecker == true && imgMatch == 1) {
+		birdImg = new ImgS2(425,125,1);
+		winChecker = false;
+	}
+	if (winChecker == true && imgMatch == 2) {
+		ocarinaImg = new ImgS2(425,175,2);
+		winChecker = false;
+	}
+	if (winChecker == true && imgMatch == 3) {
+		hamastsaImg = new ImgS2(425,225,3);
+		winChecker = false;
+	}
+	if (winChecker == true && imgMatch == 4) {
+		shellImg = new ImgS2(425,275,4);
+		winChecker = false;
+	}
+	if (winChecker == true && imgMatch == 5) {
+		panpipeImg = new ImgS2(425,325,5);
+		winChecker = false;
+	}
+	if (winChecker == true && imgMatch == 6) {
+		oysterImg = new ImgS2(425,375,6);
+		winChecker = false;
+	}
+	if (winChecker == true && imgMatch == 7) {
+		peyoteImg = new ImgS2(425,425,7);
+		winChecker = false;
+	}
+}
+function touchStarted() {
+  if (state = 1) {
+		fluteSound.playSound();
+		birdSound.playSound();
+		ocarinaSound.playSound();
+		hamastsaSound.playSound();
+		shellSound.playSound();
+		panpipeSound.playSound();
+		oysterSound.playSound();
+		peyoteSound.playSound();
+		fluteImg.clickCheck();
+		birdImg.clickCheck();
+		ocarinaImg.clickCheck();
+		hamastsaImg.clickCheck();
+		shellImg.clickCheck();
+		panpipeImg.clickCheck();
+		oysterImg.clickCheck();
+		peyoteImg.clickCheck();
+	}
+}
+function touchEnded() {
+	fluteImg.clickCheckOff();
+	birdImg.clickCheckOff();
+	ocarinaImg.clickCheckOff();
+	hamastsaImg.clickCheckOff();
+	shellImg.clickCheckOff();
+	panpipeImg.clickCheckOff();
+	oysterImg.clickCheckOff();
+	peyoteImg.clickCheckOff();
+}
+class ImgS2 {
+	constructor(x,y,i) {
+		this.xPos = x;
+		this.xPosSave = x;
+		this.yPos = y;
+		this.yPosSave = y;
+		this.i = i;
+		if (sounds[this.i] != '') {
+			this.hasSound = true;
+		}
+		else {
+			this.hasSound = false;
+		}
+	}
+	display() {
+		if (this.xPosSave > 200) {
+			fill(180,255,180);
+			if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+				fill(100,255,100);
+			}
+			else if (this.hasSound && sounds[this.i].isPlaying()) {
+				fill(100,255,100);
+				soundMatch = '';
+			}
+		}
+		else {
+			fill(255);
+			if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+				fill(200);
+			}
+		}
+		strokeWeight(3);
+		stroke(0);
+		ellipse(this.xPos, this.yPos, 40, 40);
+		imageMode(CENTER);
+		image(pictures[this.i], this.xPos, this.yPos, 30, 30);
+	}
+	clickCheck() {
+		if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+			this.clickChecker = true;
+			imgMatch = this.i;
+		}
+		else {
+			this.clickChecker = false;
+		}
+	}
+	clickCheckOff() {
+		imgMatchX = mouseX;
+		imgMatchY = mouseY;
+		this.clickChecker = false;
+		matchCheck = true;
+	}
+	move() {
+		if (this.xPosSave < 200) {
+			if (this.clickChecker == true) {
+				this.xPos = mouseX;
+				this.yPos = mouseY;
+			}
+			else if (this.clickChecker == false) {
+				this.xPos = this.xPosSave;
+				this.yPos = this.yPosSave;
+			}
+		}
+	}
+}
+class SoundS2 {
+	constructor(x,y,i) {
+		this.xPos = x;
+		this.yPos = y;
+		this.i = i;
+		if (sounds[this.i] != '') {
+			this.hasSound = true;
+		}
+		else {
+			this.hasSound = false;
+		}
+	}
+	display() {
+		if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+			soundMatch = this.i;
+			soundMatchX = this.xPos;
+			soundMatchY = this.yPos;
+			if (matchCheck == true && soundMatch == imgMatch && dist(soundMatchX,soundMatchY,imgMatchX,imgMatchY)<23) {
+				matchCheck = false;
+				newX = this.xPos;
+				newY = this.yPos;
+				winChecker = true;
+				print('won');
+			}
+			fill(150);
+		}
+		else if (this.hasSound && sounds[this.i].isPlaying()) {
+			fill(150);
+			soundMatch = '';
+		}
+		else if (!this.hasSound) {
+			fill(25);
+			soundMatch = '';
+		}
+		else {
+			fill(255);
+		}
+		strokeWeight(3);
+		stroke(0);
+		ellipse(this.xPos, this.yPos, 40, 40);
+		imageMode(CENTER);
+		image(speaker, this.xPos, this.yPos, 30, 30);
+	}
+	playSound() {
+		if (dist(mouseX,mouseY,this.xPos,this.yPos)<23 && this.hasSound) {  //23 instead of 20 diameter for a little wiggle room
+			if (soundActivator != this.i) {
+				if (soundActivator < 8) {
+					sounds[soundActivator].stop();
+				}
+				sounds[this.i].play();
+				soundActivator = this.i;
+			}
+			else if (soundActivator == this.i && sounds[this.i].isPlaying()) {
+				sounds[this.i].stop();
+			}
+		}
+	}
+}
+// END STATE 1
 
 class StateTwo {
 	constructor(instruments) {
