@@ -232,7 +232,7 @@ function matchGame() {
 	}
 }
 function touchStarted() {
-  if (state = 1) {
+  if (state == 1) {
 		fluteSound.playSound();
 		birdSound.playSound();
 		ocarinaSound.playSound();
@@ -252,7 +252,7 @@ function touchStarted() {
 	}
 }
 function touchEnded() {
-  if (state = 1) {
+  if (state == 1) {
 	fluteImg.clickCheckOff();
 	birdImg.clickCheckOff();
 	ocarinaImg.clickCheckOff();
