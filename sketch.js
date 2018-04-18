@@ -252,6 +252,7 @@ function touchStarted() {
 	}
 }
 function touchEnded() {
+  if (state = 1) {
 	fluteImg.clickCheckOff();
 	birdImg.clickCheckOff();
 	ocarinaImg.clickCheckOff();
@@ -260,6 +261,8 @@ function touchEnded() {
 	panpipeImg.clickCheckOff();
 	oysterImg.clickCheckOff();
 	peyoteImg.clickCheckOff();
+
+  }
 }
 class ImgS2 {
 	constructor(x,y,i) {
