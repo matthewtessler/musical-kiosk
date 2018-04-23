@@ -48,11 +48,13 @@ function preload() {
 	}
 	pictures.push(loadImage('images/drumIcon.png'));
 	pictures.push(loadImage('images/treeIcon.png'));
-	
+	pictures.push(loadImage('images/brooklynMuseumLogo.jpg'));
+
 	speaker = loadImage("images/speaker.png");
 }
 
 function setup() {
+	noStroke();
 	createCanvas(500,600);
 	background(255,0,0);
 	imageMode(CENTER);
@@ -72,7 +74,7 @@ function setup() {
 			x += 120;
 		}
 	}
-	
+
 	//STATE 1
 	fluteSound = new SoundS2(425,75,0);
 	birdSound = new SoundS2(425,125,1);
@@ -97,7 +99,7 @@ function setup() {
 
 function draw() {
 	if (state == 0) {
-		background(255,0,0);
+		background(79,219,255);
 		text("Play", 25,25);
 
 		for (var i = 0; i < 8; i++) {
@@ -105,13 +107,16 @@ function draw() {
 		}
 	}
 	else if (state == 1) {
-		background(0,220,0);
+		background(79,219,255);
 		matchGame();
 	}
 	else if (state == 2) {
-		background(0,0,255);
+		background(79,219,255);
 		stateTwo.display();
 	}
+	imageMode(CORNER);
+	image(pictures[10], width-150, 0, 150, 95);
+	imageMode(CENTER);
 }
 
 function keyPressed() {
