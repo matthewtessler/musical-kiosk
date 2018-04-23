@@ -76,22 +76,22 @@ function setup() {
 	}
 
 	//STATE 1
-	fluteSound = new SoundS2(425,75,0);
-	birdSound = new SoundS2(425,125,1);
-	ocarinaSound = new SoundS2(425,175,2);
-	hamastsaSound = new SoundS2(425,225,3);
-	shellSound = new SoundS2(425,275,4);
-	panpipeSound = new SoundS2(425,325,5);
-	oysterSound = new SoundS2(425,375,6);
-	peyoteSound = new SoundS2(425,425,7);
-	fluteImg = new ImgS2(75,75,0);
-	birdImg = new ImgS2(75,125,1);
-	ocarinaImg = new ImgS2(75,175,2);
-	hamastsaImg = new ImgS2(75,225,3);
-	shellImg = new ImgS2(75,275,4);
-	panpipeImg = new ImgS2(75,325,5);
-	oysterImg = new ImgS2(75,375,6);
-	peyoteImg = new ImgS2(75,425,7);
+	fluteSound = new SoundS2(425,66.66,0);
+	birdSound = new SoundS2(425,133.33,1);
+	ocarinaSound = new SoundS2(425,200,2);
+	hamastsaSound = new SoundS2(425,266.66,3);
+	shellSound = new SoundS2(425,333.33,4);
+	panpipeSound = new SoundS2(425,400,5);
+	oysterSound = new SoundS2(425,466.66,6);
+	peyoteSound = new SoundS2(425,533.33,7);
+	fluteImg = new ImgS2(75,66.66,0);
+	birdImg = new ImgS2(75,133.33,1);
+	ocarinaImg = new ImgS2(75,200,2);
+	hamastsaImg = new ImgS2(75,266.66,3);
+	shellImg = new ImgS2(75,333.33,4);
+	panpipeImg = new ImgS2(75,400,5);
+	oysterImg = new ImgS2(75,466.66,6);
+	peyoteImg = new ImgS2(75,533.33,7);
 	//END STATE 1
 
 	stateTwo = new StateTwo(instruments, remixSounds);
@@ -100,6 +100,8 @@ function setup() {
 function draw() {
 	if (state == 0) {
 		background(79,219,255);
+		imageMode(CENTER);
+		image(pictures[10], width/2, height/2-50, 150, 95);
 		text("Play", 25,25);
 
 		for (var i = 0; i < 8; i++) {
@@ -108,15 +110,19 @@ function draw() {
 	}
 	else if (state == 1) {
 		background(79,219,255);
+		fill(255);
+		text("Matching", 25,25);
+		imageMode(CENTER);
+		image(pictures[10], width/2, height/2-50, 150, 95);
 		matchGame();
 	}
 	else if (state == 2) {
 		background(79,219,255);
+		imageMode(CENTER);
+		image(pictures[10], width/2, height/2-50, 150, 95);
 		stateTwo.display();
 	}
-	imageMode(CORNER);
-	image(pictures[10], width-150, 0, 150, 95);
-	imageMode(CENTER);
+	
 }
 
 function keyPressed() {
@@ -204,35 +210,35 @@ function matchGame() {
 	oysterImg.move();
 	peyoteImg.move();
 	if (winChecker == true && imgMatch == 0) {
-		fluteImg = new ImgS2(425,75,0);
+		fluteImg = new ImgS2(425,66.66,0);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 1) {
-		birdImg = new ImgS2(425,125,1);
+		birdImg = new ImgS2(425,133.33,1);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 2) {
-		ocarinaImg = new ImgS2(425,175,2);
+		ocarinaImg = new ImgS2(425,200,2);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 3) {
-		hamastsaImg = new ImgS2(425,225,3);
+		hamastsaImg = new ImgS2(425,266.66,3);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 4) {
-		shellImg = new ImgS2(425,275,4);
+		shellImg = new ImgS2(425,333.33,4);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 5) {
-		panpipeImg = new ImgS2(425,325,5);
+		panpipeImg = new ImgS2(425,400,5);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 6) {
-		oysterImg = new ImgS2(425,375,6);
+		oysterImg = new ImgS2(425,466.66,6);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 7) {
-		peyoteImg = new ImgS2(425,425,7);
+		peyoteImg = new ImgS2(425,533.33,7);
 		winChecker = false;
 	}
 }
@@ -286,7 +292,7 @@ class ImgS2 {
 	display() {
 		if (this.xPosSave > 200) {
 			fill(180,255,180);
-			if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+			if (dist(mouseX,mouseY,this.xPos,this.yPos)<27) {
 				fill(100,255,100);
 			}
 			else if (this.hasSound && sounds[this.i].isPlaying()) {
@@ -296,16 +302,16 @@ class ImgS2 {
 		}
 		else {
 			fill(255);
-			if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+			if (dist(mouseX,mouseY,this.xPos,this.yPos)<27) {
 				fill(200);
 			}
 		}
-		ellipse(this.xPos, this.yPos, 40, 40);
+		ellipse(this.xPos, this.yPos, 55, 55);
 		imageMode(CENTER);
-		image(pictures[this.i], this.xPos, this.yPos, 30, 30);
+		image(pictures[this.i], this.xPos, this.yPos, 45, 45);
 	}
 	clickCheck() {
-		if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+		if (dist(mouseX,mouseY,this.xPos,this.yPos)<27) {
 			this.clickChecker = true;
 			imgMatch = this.i;
 		}
@@ -345,11 +351,11 @@ class SoundS2 {
 		}
 	}
 	display() {
-		if (dist(mouseX,mouseY,this.xPos,this.yPos)<23) {
+		if (dist(mouseX,mouseY,this.xPos,this.yPos)<27) {
 			soundMatch = this.i;
 			soundMatchX = this.xPos;
 			soundMatchY = this.yPos;
-			if (matchCheck == true && soundMatch == imgMatch && dist(soundMatchX,soundMatchY,imgMatchX,imgMatchY)<23) {
+			if (matchCheck == true && soundMatch == imgMatch && dist(soundMatchX,soundMatchY,imgMatchX,imgMatchY)<27) {
 				matchCheck = false;
 				newX = this.xPos;
 				newY = this.yPos;
@@ -369,12 +375,12 @@ class SoundS2 {
 		else {
 			fill(255);
 		}
-		ellipse(this.xPos, this.yPos, 40, 40);
+		ellipse(this.xPos, this.yPos, 55, 55);
 		imageMode(CENTER);
 		image(speaker, this.xPos, this.yPos, 30, 30);
 	}
 	playSound() {
-		if (dist(mouseX,mouseY,this.xPos,this.yPos)<23 && this.hasSound) {  //23 instead of 20 diameter for a little wiggle room
+		if (dist(mouseX,mouseY,this.xPos,this.yPos)<27 && this.hasSound) {  //23 instead of 20 diameter for a little wiggle room
 			if (soundActivator != this.i) {
 				if (soundActivator < 8) {
 					sounds[soundActivator].stop();
