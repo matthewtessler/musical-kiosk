@@ -300,8 +300,6 @@ class ImgS2 {
 				fill(200);
 			}
 		}
-		strokeWeight(3);
-		stroke(0);
 		ellipse(this.xPos, this.yPos, 40, 40);
 		imageMode(CENTER);
 		image(pictures[this.i], this.xPos, this.yPos, 30, 30);
@@ -371,8 +369,6 @@ class SoundS2 {
 		else {
 			fill(255);
 		}
-		strokeWeight(3);
-		stroke(0);
 		ellipse(this.xPos, this.yPos, 40, 40);
 		imageMode(CENTER);
 		image(speaker, this.xPos, this.yPos, 30, 30);
