@@ -135,13 +135,15 @@ function keyPressed() {
 }
 
 function mousePressed() {
-	if (state == 0) {
+	if (state === 0 || state === 2) {
 		for (var i = 0; i < 8; i++) {
 			if (dist(mouseX, mouseY, instruments[i].x, instruments[i].y) < 50) {
 				instruments[i].clicked();
 			}
 		}
 	}
+
+	stateTwo.clickRemix();
 }
 
 // s0
@@ -424,7 +426,6 @@ class StateTwo {
 			if (row <= 2) {
 				var temp = new RemixButton(70*column, 70*row + 400, i)
 				temp.display();
-				temp.clicked();
 				column++;
 				if (column === 7) {
 					row++;
@@ -433,6 +434,22 @@ class StateTwo {
 			}
 		}
 		/***********end remix buttons************/
+	}
+
+	clickRemix() {
+		var column = 1;
+		var row = 1;
+		for (var i=0; i<12; i++) {
+			if (row <= 2) {
+				var temp = new RemixButton(70*column, 70*row + 400, i)
+				temp.clicked();
+				column++;
+				if (column === 7) {
+					row++;
+					column = 1;
+				}
+			}
+		}
 	}
 }
 
@@ -443,7 +460,6 @@ class RemixButton {
 		this.diameter = 40;
 		this.radius = this.diameter/2;
 		this.soundIndex = soundIndex;
-		this.playPauseGate = 'open';
 		if (this.soundIndex <=7) {
 			this.isBeat = true;
 			this.isSoundscape = false;
@@ -472,17 +488,13 @@ class RemixButton {
 	}
 
 	clicked() {
-		if (dist(mouseX, mouseY, this.xPos, this.yPos) < this.radius && mouseIsPressed) {
-			if (this.playPauseGate === 'open' && !remixSounds[this.soundIndex].isPlaying()) {
+		if (dist(mouseX, mouseY, this.xPos, this.yPos) < this.radius) {
+			if (!remixSounds[this.soundIndex].isPlaying()) {
 				remixSounds[this.soundIndex].play();
 			}
-			else if (this.playPauseGate === 'open' && remixSounds[this.soundIndex].isPlaying()) {
+			else if (remixSounds[this.soundIndex].isPlaying()) {
 				remixSounds[this.soundIndex].stop();
 			}
-			this.playPauseGate = 'closed';
-		}
-		else if(!mouseIsPressed) {
-			this.playPauseGate = 'open';
 		}
 	}
 }
