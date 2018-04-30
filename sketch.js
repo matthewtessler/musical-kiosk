@@ -98,6 +98,7 @@ function setup() {
 }
 
 function draw() {
+	console.log(frameCount,frameRate);
 	if (state == 0) {
 		background(79,219,255);
 		imageMode(CENTER);
@@ -243,17 +244,16 @@ function matchGame() {
 	}
 }
 function touchStarted() {
-	
+
 	if (state === 0 || state === 2) {
 		for (var i = 0; i < 8; i++) {
 			if (dist(mouseX, mouseY, instruments[i].x, instruments[i].y) < 50) {
 				instruments[i].clicked();
 			}
 		}
+		stateTwo.clickRemix();
 	}
 
-	stateTwo.clickRemix();
-	
 	if (state == 1) {
 		fluteSound.playSound();
 		birdSound.playSound();
@@ -412,6 +412,20 @@ class StateTwo {
 		this.instruments = instruments;
 		this.remixButtonDiameter = 40;
 		this.remixButtonRadius = this.remixButtonDiameter/2;
+		this.remixButtons = [];
+		var column = 1;
+		var row = 1;
+		for (var i=0; i<12; i++) {
+			if (row <= 2) {
+				var temp = new RemixButton(70*column, 70*row + 400, i)
+				this.remixButtons.push(temp);
+				column++;
+				if (column === 7) {
+					row++;
+					column = 1;
+				}
+			}
+		}
 	}
 
 	display() {
@@ -420,35 +434,16 @@ class StateTwo {
 			instruments[i].display();
 		}
 		/***************remix buttons************/
-		var column = 1;
-		var row = 1;
 		for (var i=0; i<12; i++) {
-			if (row <= 2) {
-				var temp = new RemixButton(70*column, 70*row + 400, i)
-				temp.display();
-				column++;
-				if (column === 7) {
-					row++;
-					column = 1;
-				}
-			}
+			this.remixButtons[i].display();
 		}
 		/***********end remix buttons************/
 	}
 
 	clickRemix() {
-		var column = 1;
-		var row = 1;
 		for (var i=0; i<12; i++) {
-			if (row <= 2) {
-				var temp = new RemixButton(70*column, 70*row + 400, i)
-				temp.clicked();
-				column++;
-				if (column === 7) {
-					row++;
-					column = 1;
-				}
-			}
+			this.remixButtons[i].clicked();
+			//console.log('clicked!');
 		}
 	}
 }
@@ -489,11 +484,11 @@ class RemixButton {
 
 	clicked() {
 		if (dist(mouseX, mouseY, this.xPos, this.yPos) < this.radius) {
-			if (!remixSounds[this.soundIndex].isPlaying()) {
-				remixSounds[this.soundIndex].play();
+			if (remixSounds[this.soundIndex].isPlaying()) {
+				remixSounds[this.soundIndex].pause();
 			}
-			else if (remixSounds[this.soundIndex].isPlaying()) {
-				remixSounds[this.soundIndex].stop();
+			else {
+				remixSounds[this.soundIndex].play();
 			}
 		}
 	}
