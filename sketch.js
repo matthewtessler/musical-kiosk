@@ -101,7 +101,7 @@ function draw() {
 	if (state == 0) {
 		background(79,219,255);
 		imageMode(CENTER);
-		image(pictures[10], width/2, height/2-50, 150, 95);
+		image(pictures[10], width/2, 50, 190, 110);
 		text("Play", 25,25);
 
 		for (var i = 0; i < 8; i++) {
@@ -113,16 +113,16 @@ function draw() {
 		fill(255);
 		text("Matching", 25,25);
 		imageMode(CENTER);
-		image(pictures[10], width/2, height/2-50, 150, 95);
+		image(pictures[10], width/2, 50, 190, 110);
 		matchGame();
 	}
 	else if (state == 2) {
 		background(79,219,255);
 		imageMode(CENTER);
-		image(pictures[10], width/2, height/2-50, 150, 95);
+		image(pictures[10], width/2, 50, 190, 110);
 		stateTwo.display();
 	}
-	
+
 }
 
 function keyPressed() {
@@ -243,7 +243,7 @@ function matchGame() {
 	}
 }
 function touchStarted() {
-  if (state == 1) {
+	if (state == 1) {
 		fluteSound.playSound();
 		birdSound.playSound();
 		ocarinaSound.playSound();
@@ -263,17 +263,17 @@ function touchStarted() {
 	}
 }
 function touchEnded() {
-  if (state == 1) {
-	fluteImg.clickCheckOff();
-	birdImg.clickCheckOff();
-	ocarinaImg.clickCheckOff();
-	hamastsaImg.clickCheckOff();
-	shellImg.clickCheckOff();
-	panpipeImg.clickCheckOff();
-	oysterImg.clickCheckOff();
-	peyoteImg.clickCheckOff();
+	if (state == 1) {
+		fluteImg.clickCheckOff();
+		birdImg.clickCheckOff();
+		ocarinaImg.clickCheckOff();
+		hamastsaImg.clickCheckOff();
+		shellImg.clickCheckOff();
+		panpipeImg.clickCheckOff();
+		oysterImg.clickCheckOff();
+		peyoteImg.clickCheckOff();
 
-  }
+	}
 }
 class ImgS2 {
 	constructor(x,y,i) {
@@ -434,6 +434,7 @@ class RemixButton {
 		this.diameter = 40;
 		this.radius = this.diameter/2;
 		this.soundIndex = soundIndex;
+		this.playPauseGate = 'open';
 		if (this.soundIndex <=7) {
 			this.isBeat = true;
 			this.isSoundscape = false;
@@ -445,6 +446,12 @@ class RemixButton {
 	}
 
 	display() {
+		if (remixSounds[this.soundIndex].isPlaying()) {
+			fill(128);
+		}
+		else {
+			fill(255);
+		}
 		ellipse(this.xPos, this.yPos, this.diameter, this.diameter);
 		imageMode(CENTER);
 		if (this.isBeat) {
@@ -457,7 +464,16 @@ class RemixButton {
 
 	clicked() {
 		if (dist(mouseX, mouseY, this.xPos, this.yPos) < this.radius && mouseIsPressed) {
-			remixSounds[this.soundIndex].play();
+			if (this.playPauseGate === 'open' && !remixSounds[this.soundIndex].isPlaying()) {
+				remixSounds[this.soundIndex].play();
+			}
+			else if (this.playPauseGate === 'open' && remixSounds[this.soundIndex].isPlaying()) {
+				remixSounds[this.soundIndex].stop();
+			}
+			this.playPauseGate = 'closed';
+		}
+		else if(!mouseIsPressed) {
+			this.playPauseGate = 'open';
 		}
 	}
 }
