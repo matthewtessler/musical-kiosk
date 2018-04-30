@@ -134,17 +134,6 @@ function keyPressed() {
 	}
 }
 
-function mousePressed() {
-	if (state === 0 || state === 2) {
-		for (var i = 0; i < 8; i++) {
-			if (dist(mouseX, mouseY, instruments[i].x, instruments[i].y) < 50) {
-				instruments[i].clicked();
-			}
-		}
-	}
-
-	stateTwo.clickRemix();
-}
 
 // s0
 class Instrument { // maybe i could have play/pause right on the ellipse? like the play/pause graphic, gray it or change opacity when it plays?
@@ -254,6 +243,17 @@ function matchGame() {
 	}
 }
 function touchStarted() {
+	
+	if (state === 0 || state === 2) {
+		for (var i = 0; i < 8; i++) {
+			if (dist(mouseX, mouseY, instruments[i].x, instruments[i].y) < 50) {
+				instruments[i].clicked();
+			}
+		}
+	}
+
+	stateTwo.clickRemix();
+	
 	if (state == 1) {
 		fluteSound.playSound();
 		birdSound.playSound();
