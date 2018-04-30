@@ -134,13 +134,22 @@ function keyPressed() {
 	}
 }
 
+function mousePressed() {
+	if (state == 0) {
+		for (var i = 0; i < 8; i++) {
+			if (dist(mouseX, mouseY, instruments[i].x, instruments[i].y) < 50) {
+				instruments[i].clicked();
+			}
+		}
+	}
+}
+
 // s0
 class Instrument { // maybe i could have play/pause right on the ellipse? like the play/pause graphic, gray it or change opacity when it plays?
 	constructor(x,y,i) {
 		this.x = x;
 		this.y = y;
 		this.i = i;
-		this.startMillis = 0;
 		if (sounds[this.i] != '') {
 			this.enabled = true;
 			this.hasSound = true;
@@ -155,6 +164,9 @@ class Instrument { // maybe i could have play/pause right on the ellipse? like t
 		if (this.hasSound && sounds[this.i].isPlaying()) {
 			fill(128);
 		}
+		else if (this.hasSound && !sounds[this.i].isPlaying()) {
+			fill(255);
+		}
 		else if (!this.hasSound) {
 			fill(0);
 		}
@@ -164,20 +176,17 @@ class Instrument { // maybe i could have play/pause right on the ellipse? like t
 		ellipse(this.x, this.y, 100,100);
 		image(pictures[this.i], this.x,this.y,75,75);
 		fill(255);
-		this.clicked();
 	}
 
 	clicked() {
-		if (dist(mouseX, mouseY, this.x, this.y) < 50 && mouseIsPressed && this.hasSound) {
+		if (this.hasSound) {
 			if (this.enabled) {
 				this.enabled = false;
 				sounds[this.i].play();
-				this.startMillis = millis();
 			}
-			else if (!this.enabled && (millis() - this.startMillis) > 250) { // it has to be a really light click right now
-				sounds[this.i].stop();
+			else if (!this.enabled) {
+				sounds[this.i].pause();
 				this.enabled = true;
-				this.startMillis = 0;
 			}
 		}
 	}
