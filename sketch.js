@@ -6,10 +6,8 @@ var pictures;
 //STATE 1: matching
 var speaker;
 var soundActivator;
-var clickChecker = false;
+var clickChecker = false
 var winChecker, matchCheck,soundMatch, imgMatch, soundMatchX, soundMatchY, imgMatchX, imgMatchY, newY,newX;
-var SoundS1Array = [];
-var j, x, i;
 //END STATE 1 SPECIFIC
 
 //STATE 2
@@ -78,39 +76,29 @@ function setup() {
 	}
 
 	//STATE 1
-	SoundS1Array = [[425,66.66],[425,133.33],[425,200],[425,266.66],[425,333.33],[425,400],[425,466.66],[425,533.33]]
-
-	///PUT ARRAY SHUFFLING HERE
-
-	for (i = SoundS1Array.length - 1; i>0; i--) {
-		j = Math.floor(Math.random()*(i+1));
-		x = SoundS1Array[i];
-		SoundS1Array[i] = SoundS1Array[j];
-		SoundS1Array[j] = x;
-	}
-
-	fluteSound = new SoundS1(SoundS1Array[0][0],SoundS1Array[0][1],0);
-	birdSound = new SoundS1(SoundS1Array[1][0],SoundS1Array[1][1],1);
-	ocarinaSound = new SoundS1(SoundS1Array[2][0],SoundS1Array[2][1],2);
-	hamastsaSound = new SoundS1(SoundS1Array[3][0],SoundS1Array[3][1],3);
-	shellSound = new SoundS1(SoundS1Array[4][0],SoundS1Array[4][1],4);
-	panpipeSound = new SoundS1(SoundS1Array[5][0],SoundS1Array[5][1],5);
-	oysterSound = new SoundS1(SoundS1Array[6][0],SoundS1Array[6][1],6);
-	peyoteSound = new SoundS1(SoundS1Array[7][0],SoundS1Array[7][1],7);
-	fluteImg = new ImgS1(75,66.66,0);
-	birdImg = new ImgS1(75,133.33,1);
-	ocarinaImg = new ImgS1(75,200,2);
-	hamastsaImg = new ImgS1(75,266.66,3);
-	shellImg = new ImgS1(75,333.33,4);
-	panpipeImg = new ImgS1(75,400,5);
-	oysterImg = new ImgS1(75,466.66,6);
-	peyoteImg = new ImgS1(75,533.33,7);
+	fluteSound = new SoundS2(425,66.66,0);
+	birdSound = new SoundS2(425,133.33,1);
+	ocarinaSound = new SoundS2(425,200,2);
+	hamastsaSound = new SoundS2(425,266.66,3);
+	shellSound = new SoundS2(425,333.33,4);
+	panpipeSound = new SoundS2(425,400,5);
+	oysterSound = new SoundS2(425,466.66,6);
+	peyoteSound = new SoundS2(425,533.33,7);
+	fluteImg = new ImgS2(75,66.66,0);
+	birdImg = new ImgS2(75,133.33,1);
+	ocarinaImg = new ImgS2(75,200,2);
+	hamastsaImg = new ImgS2(75,266.66,3);
+	shellImg = new ImgS2(75,333.33,4);
+	panpipeImg = new ImgS2(75,400,5);
+	oysterImg = new ImgS2(75,466.66,6);
+	peyoteImg = new ImgS2(75,533.33,7);
 	//END STATE 1
 
 	stateTwo = new StateTwo(instruments, remixSounds);
 }
 
 function draw() {
+	console.log(frameCount,frameRate);
 	if (state == 0) {
 		background(79,219,255);
 		imageMode(CENTER);
@@ -141,26 +129,9 @@ function draw() {
 function keyPressed() {
 	if (keyCode === 39 && state !== 2) {
 		state++;
-	  for (var i=0; i<12; i++) {
-			if (sounds[i] !== 'undefined' && sounds[i] !== '' && i<sounds.length) {
-				sounds[i].stop();
-				instruments[i].enabled = true;
-			}
-			if (remixSounds[i] !== 'undefined' && remixSounds[i] !== '') {
-				remixSounds[i].stop();
-			}
-		}
 	}
 	else if (keyCode === 37 && state !== 0) {
 		state--;
-		for (var i=0; i<12; i++) {
-			if (sounds[i] !== 'undefined' && sounds[i] !== '' && i<sounds.length) {
-				sounds[i].stop();
-			}
-			if (remixSounds[i] !== 'undefined' && remixSounds[i] !== '') {
-				remixSounds[i].stop();
-			}
-		}
 	}
 }
 
@@ -172,9 +143,11 @@ class Instrument { // maybe i could have play/pause right on the ellipse? like t
 		this.y = y;
 		this.i = i;
 		if (sounds[this.i] != '') {
+			this.enabled = true;
 			this.hasSound = true;
 		}
 		else {
+			this.enabled = false;
 			this.hasSound = false;
 		}
 	}
@@ -199,24 +172,17 @@ class Instrument { // maybe i could have play/pause right on the ellipse? like t
 
 	clicked() {
 		if (this.hasSound) {
-			if (soundActivator != this.i) {
-				if (soundActivator < 8) {
-					sounds[soundActivator].pause();
-				}
+			if (this.enabled) {
+				this.enabled = false;
 				sounds[this.i].play();
-				soundActivator = this.i;
 			}
-			else if (soundActivator == this.i && sounds[this.i].isPlaying()) {
+			else if (!this.enabled) {
 				sounds[this.i].pause();
-			}
-			else {
-				sounds[this.i].play();
+				this.enabled = true;
 			}
 		}
 	}
 }
-
-
 
 //STATE 1: matching
 function matchGame() {
@@ -245,39 +211,38 @@ function matchGame() {
 	oysterImg.move();
 	peyoteImg.move();
 	if (winChecker == true && imgMatch == 0) {
-		fluteImg = new ImgS1(SoundS1Array[0][0],SoundS1Array[0][1],0);
+		fluteImg = new ImgS2(425,66.66,0);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 1) {
-		birdImg = new ImgS1(SoundS1Array[1][0],SoundS1Array[1][1],1);
+		birdImg = new ImgS2(425,133.33,1);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 2) {
-		ocarinaImg = new ImgS1(SoundS1Array[2][0],SoundS1Array[2][1],2);
+		ocarinaImg = new ImgS2(425,200,2);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 3) {
-		hamastsaImg = new ImgS1(SoundS1Array[3][0],SoundS1Array[3][1],3);
+		hamastsaImg = new ImgS2(425,266.66,3);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 4) {
-		shellImg = new ImgS1(SoundS1Array[4][0],SoundS1Array[4][1],4);
+		shellImg = new ImgS2(425,333.33,4);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 5) {
-		panpipeImg = new ImgS1(SoundS1Array[5][0],SoundS1Array[5][1],5);
+		panpipeImg = new ImgS2(425,400,5);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 6) {
-		oysterImg = new ImgS1(SoundS1Array[6][0],SoundS1Array[6][1],6);
+		oysterImg = new ImgS2(425,466.66,6);
 		winChecker = false;
 	}
 	if (winChecker == true && imgMatch == 7) {
-		peyoteImg = new ImgS1(SoundS1Array[7][0],SoundS1Array[7][1],7);
+		peyoteImg = new ImgS2(425,533.33,7);
 		winChecker = false;
 	}
 }
-
 function touchStarted() {
 
 	if (state === 0 || state === 2) {
@@ -286,9 +251,6 @@ function touchStarted() {
 				instruments[i].clicked();
 			}
 		}
-	}
-
-	if (state ==2) {
 		stateTwo.clickRemix();
 	}
 
@@ -324,7 +286,7 @@ function touchEnded() {
 
 	}
 }
-class ImgS1 {
+class ImgS2 {
 	constructor(x,y,i) {
 		this.xPos = x;
 		this.xPosSave = x;
@@ -342,10 +304,10 @@ class ImgS1 {
 		if (this.xPosSave > 200) {
 			fill(180,255,180);
 			if (dist(mouseX,mouseY,this.xPos,this.yPos)<27) {
-				fill(50,200,50);
+				fill(100,255,100);
 			}
 			else if (this.hasSound && sounds[this.i].isPlaying()) {
-				fill(50,255,50);
+				fill(100,255,100);
 				soundMatch = '';
 			}
 		}
@@ -355,9 +317,9 @@ class ImgS1 {
 				fill(200);
 			}
 		}
-		ellipse(this.xPos, this.yPos, 60, 60);
+		ellipse(this.xPos, this.yPos, 55, 55);
 		imageMode(CENTER);
-		image(pictures[this.i], this.xPos, this.yPos, 55, 55);
+		image(pictures[this.i], this.xPos, this.yPos, 45, 45);
 	}
 	clickCheck() {
 		if (dist(mouseX,mouseY,this.xPos,this.yPos)<27) {
@@ -369,13 +331,10 @@ class ImgS1 {
 		}
 	}
 	clickCheckOff() {
-		if (this.xPos > 300) {
-			imgMatchX = mouseX;
-			imgMatchY = mouseY;
-			matchCheck = true;
-		}
+		imgMatchX = mouseX;
+		imgMatchY = mouseY;
 		this.clickChecker = false;
-
+		matchCheck = true;
 	}
 	move() {
 		if (this.xPosSave < 200) {
@@ -390,7 +349,7 @@ class ImgS1 {
 		}
 	}
 }
-class SoundS1 {
+class SoundS2 {
 	constructor(x,y,i) {
 		this.xPos = x;
 		this.yPos = y;
@@ -435,16 +394,13 @@ class SoundS1 {
 		if (dist(mouseX,mouseY,this.xPos,this.yPos)<27 && this.hasSound) {  //23 instead of 20 diameter for a little wiggle room
 			if (soundActivator != this.i) {
 				if (soundActivator < 8) {
-					sounds[soundActivator].pause();
+					sounds[soundActivator].stop();
 				}
 				sounds[this.i].play();
 				soundActivator = this.i;
 			}
 			else if (soundActivator == this.i && sounds[this.i].isPlaying()) {
-				sounds[this.i].pause();
-			}
-			else {
-				sounds[this.i].play();
+				sounds[this.i].stop();
 			}
 		}
 	}
@@ -456,6 +412,20 @@ class StateTwo {
 		this.instruments = instruments;
 		this.remixButtonDiameter = 40;
 		this.remixButtonRadius = this.remixButtonDiameter/2;
+		this.remixButtons = [];
+		var column = 1;
+		var row = 1;
+		for (var i=0; i<12; i++) {
+			if (row <= 2) {
+				var temp = new RemixButton(70*column, 70*row + 400, i)
+				this.remixButtons.push(temp);
+				column++;
+				if (column === 7) {
+					row++;
+					column = 1;
+				}
+			}
+		}
 	}
 
 	display() {
@@ -464,35 +434,16 @@ class StateTwo {
 			instruments[i].display();
 		}
 		/***************remix buttons************/
-		var column = 1;
-		var row = 1;
 		for (var i=0; i<12; i++) {
-			if (row <= 2) {
-				var temp = new RemixButton(70*column, 70*row + 400, i)
-				temp.display();
-				column++;
-				if (column === 7) {
-					row++;
-					column = 1;
-				}
-			}
+			this.remixButtons[i].display();
 		}
 		/***********end remix buttons************/
 	}
 
 	clickRemix() {
-		var column = 1;
-		var row = 1;
 		for (var i=0; i<12; i++) {
-			if (row <= 2) {
-				var temp = new RemixButton(70*column, 70*row + 400, i)
-				temp.clicked();
-				column++;
-				if (column === 7) {
-					row++;
-					column = 1;
-				}
-			}
+			this.remixButtons[i].clicked();
+			//console.log('clicked!');
 		}
 	}
 }
@@ -533,11 +484,11 @@ class RemixButton {
 
 	clicked() {
 		if (dist(mouseX, mouseY, this.xPos, this.yPos) < this.radius) {
-			if (!remixSounds[this.soundIndex].isPlaying()) {
-				remixSounds[this.soundIndex].play();
+			if (remixSounds[this.soundIndex].isPlaying()) {
+				remixSounds[this.soundIndex].pause();
 			}
-			else if (remixSounds[this.soundIndex].isPlaying()) {
-				remixSounds[this.soundIndex].stop();
+			else {
+				remixSounds[this.soundIndex].play();
 			}
 		}
 	}
